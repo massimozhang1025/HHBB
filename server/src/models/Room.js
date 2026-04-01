@@ -58,7 +58,12 @@ module.exports = (sequelize) => {
   }, {
     tableName: 'rooms',
     indexes: [
-      { unique: true, fields: ['property_id', 'room_number'] }
+      { unique: true, fields: ['property_id', 'room_number'] },
+      { fields: ['property_id', 'type'] },          // Room search: filter by property + type
+      { fields: ['property_id', 'status'] },         // Room grid: filter by property + status
+      { fields: ['status'] },                        // Occupancy stats: COUNT by status
+      { fields: ['is_active'] },                     // Active room listings
+      { fields: ['price_per_night'] }                // Price range search
     ]
   });
 

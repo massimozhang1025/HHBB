@@ -59,11 +59,16 @@ module.exports = (sequelize) => {
   }, {
     tableName: 'bookings',
     indexes: [
-      { fields: ['user_id'] },
-      { fields: ['room_id'] },
-      { fields: ['property_id'] },
-      { fields: ['check_in', 'check_out'] },
-      { fields: ['status'] }
+      { fields: ['user_id'] },                               // Customer's bookings
+      { fields: ['room_id'] },                               // Room's bookings
+      { fields: ['property_id'] },                           // Property's bookings
+      { fields: ['check_in', 'check_out'] },                 // Date range search
+      { fields: ['status'] },                                // Status filter
+      { fields: ['room_id', 'status', 'check_in', 'check_out'] },  // ⚡ Availability check (critical)
+      { fields: ['property_id', 'status'] },                 // Admin: bookings by property + status
+      { fields: ['property_id', 'created_at'] },             // Analytics: trends by property
+      { fields: ['status', 'check_in'] },                    // Auto check-in query
+      { fields: ['created_at'] }                             // Analytics: time-series aggregation
     ]
   });
 

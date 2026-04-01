@@ -38,7 +38,14 @@ module.exports = (sequelize) => {
       defaultValue: DataTypes.NOW
     }
   }, {
-    tableName: 'employees'
+    tableName: 'employees',
+    indexes: [
+      { unique: true, fields: ['user_id'] },            // Fast user→employee lookup
+      { fields: ['property_id'] },                       // Filter by property
+      { fields: ['total_points'] },                      // Leaderboard sort
+      { fields: ['is_active'] },                         // Active employee filter
+      { fields: ['property_id', 'is_active'] }           // Combined: active employees per property
+    ]
   });
 
   return Employee;

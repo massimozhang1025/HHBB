@@ -61,7 +61,13 @@ module.exports = (sequelize) => {
           user.password_hash = await bcrypt.hash(user.password_hash, 12);
         }
       }
-    }
+    },
+    indexes: [
+      { fields: ['role'] },                          // Filter by role (admin/employee/customer)
+      { fields: ['is_active'] },                     // Active user filter
+      { fields: ['role', 'is_active'] },             // Combined: active users of a role
+      { unique: true, fields: ['referral_code'] }    // Referral code lookup
+    ]
   });
 
   User.prototype.validatePassword = async function (password) {
