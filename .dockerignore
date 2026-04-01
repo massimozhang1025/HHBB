@@ -1,0 +1,28 @@
+node_modules
+npm-debug.log
+.env
+.env.local
+.DS_Store
+*.log
+
+# Dev files
+client/node_modules
+server/node_modules
+server/.env
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Test
+coverage
+__tests__
+
+# Build caches
+client/.vite
+.testsprite
+docs

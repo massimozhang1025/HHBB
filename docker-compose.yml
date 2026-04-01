@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hhbb-postgres
+    environment:
+      POSTGRES_DB: hhbb_hotel
+      POSTGRES_USER: hhbb_admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-hhbb_secure_password_2026}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hhbb_admin -d hhbb_hotel"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hhbb-server
+    ports:
+      - "10000:10000"
+    environment:
+      - NODE_ENV=production
+      - PORT=10000
+      - DATABASE_URL=postgresql://hhbb_admin:${DB_PASSWORD:-hhbb_secure_password_2026}@postgres:5432/hhbb_hotel
+      - JWT_SECRET=${JWT_SECRET:-hhbb-production-secret-change-me-2026}
+      - JWT_EXPIRES_IN=7d
+      - CLIENT_URL=${CLIENT_URL:-http://localhost:10000}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:
